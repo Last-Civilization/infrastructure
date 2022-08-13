@@ -1,0 +1,22 @@
+version: '3.3'
+
+services:
+  last_civilization_vault:
+    image: vault:1.11.2
+    ports:
+      - "8200:8200"
+    environment:
+      - VAULT_DEV_LISTEN_ADDRESS=0.0.0.0:8200
+    cap_add:
+      - IPC_LOCK
+    command: vault server -dev -dev-root-token-id last-civilization
+  last_civilization_vault_setup:
+    image: vault:1.11.2
+    environment:
+      - VAULT_ADDR=http://last_civilization_vault:8200
+      - VAULT_TOKEN=last-civilization
+    volumes:
+      - ./vault_init.sh:/vault_init.sh
+    depends_on:
+      - "last_civilization_vault"
+    command: /bin/sh -c "chmod a+x ./vault_init.sh && ./vault_init.sh"
