@@ -20,3 +20,28 @@ services:
     depends_on:
       - "last_civilization_vault"
     command: /bin/sh -c "chmod a+x ./vault_init.sh && ./vault_init.sh"
+  last_civilization_postgresql_user_master:
+    image: docker.io/bitnami/postgresql:14
+    ports:
+      - '5432:5432'
+    environment:
+      - POSTGRESQL_REPLICATION_MODE=master
+      - POSTGRESQL_REPLICATION_USER=repl_last-civilization
+      - POSTGRESQL_REPLICATION_PASSWORD=repl_last-civilization
+      - POSTGRESQL_USERNAME=last-civilization
+      - POSTGRESQL_PASSWORD=last-civilization
+      - POSTGRESQL_DATABASE=last-civilization_user_db
+  last_civilization_postgresql_user_slave:
+    image: docker.io/bitnami/postgresql:14
+    ports:
+      - '5433:5432'
+    depends_on:
+      - last_civilization_postgresql_user_master
+    environment:
+      - POSTGRESQL_REPLICATION_MODE=slave
+      - POSTGRESQL_REPLICATION_USER=repl_last-civilization
+      - POSTGRESQL_REPLICATION_PASSWORD=repl_last-civilization
+      - POSTGRESQL_MASTER_HOST=last_civilization_postgresql_user_master
+      - POSTGRESQL_USERNAME=last-civilization
+      - POSTGRESQL_PASSWORD=last-civilization
+      - POSTGRESQL_MASTER_PORT_NUMBER=5432
