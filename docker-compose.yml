@@ -13,7 +13,7 @@ services:
   last-civilization_vault_setup:
     image: vault:1.11.2
     environment:
-      - VAULT_ADDR=http://last_civilization_vault:8200
+      - VAULT_ADDR=http://last-civilization_vault:8200
       - VAULT_TOKEN=last-civilization
     volumes:
       - ./vault_init.sh:/vault_init.sh
@@ -41,7 +41,29 @@ services:
       - POSTGRESQL_REPLICATION_MODE=slave
       - POSTGRESQL_REPLICATION_USER=repl_last-civilization
       - POSTGRESQL_REPLICATION_PASSWORD=repl_last-civilization
-      - POSTGRESQL_MASTER_HOST=last_civilization_postgresql_user_master
+      - POSTGRESQL_MASTER_HOST=last-civilization_postgresql_user_master
       - POSTGRESQL_USERNAME=last-civilization
       - POSTGRESQL_PASSWORD=last-civilization
       - POSTGRESQL_MASTER_PORT_NUMBER=5432
+  last-civilization_keycloak:
+    image: quay.io/keycloak/keycloak:16.0.0
+    ports:
+      - "8080:8080"
+    environment:
+      - KEYCLOAK_USER=last-civilization
+      - KEYCLOAK_PASSWORD=last-civilization
+      - KK_TO_RMQ_URL=last-civilization_rabbitmq
+      - KK_TO_RMQ_PORT=5672
+      - KK_TO_RMQ_USERNAME=last-civilization
+      - KK_TO_RMQ_PASSWORD=last-civilization
+      - KK_TO_RMQ_VHOST=/
+    volumes:
+      - ./keycloak-to-rabbit-3.0.jar:/opt/jboss/keycloak/standalone/deployments/keycloak-to-rabbit-3.0.jar
+  last-civilization_rabbitmq:
+    image: rabbitmq:3-management-alpine
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      - RABBITMQ_DEFAULT_USER=last-civilization
+      - RABBITMQ_DEFAULT_PASS=last-civilization
