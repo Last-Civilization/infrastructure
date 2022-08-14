@@ -1,7 +1,7 @@
 version: '3.3'
 
 services:
-  last_civilization_vault:
+  last-civilization_vault:
     image: vault:1.11.2
     ports:
       - "8200:8200"
@@ -10,7 +10,7 @@ services:
     cap_add:
       - IPC_LOCK
     command: vault server -dev -dev-root-token-id last-civilization
-  last_civilization_vault_setup:
+  last-civilization_vault_setup:
     image: vault:1.11.2
     environment:
       - VAULT_ADDR=http://last_civilization_vault:8200
@@ -18,9 +18,9 @@ services:
     volumes:
       - ./vault_init.sh:/vault_init.sh
     depends_on:
-      - "last_civilization_vault"
+      - "last-civilization_vault"
     command: /bin/sh -c "chmod a+x ./vault_init.sh && ./vault_init.sh"
-  last_civilization_postgresql_user_master:
+  last-civilization_postgresql_user_master:
     image: docker.io/bitnami/postgresql:14
     ports:
       - '5432:5432'
@@ -31,12 +31,12 @@ services:
       - POSTGRESQL_USERNAME=last-civilization
       - POSTGRESQL_PASSWORD=last-civilization
       - POSTGRESQL_DATABASE=last-civilization_user_db
-  last_civilization_postgresql_user_slave:
+  last-civilization_postgresql_user_slave:
     image: docker.io/bitnami/postgresql:14
     ports:
       - '5433:5432'
     depends_on:
-      - last_civilization_postgresql_user_master
+      - last-civilization_postgresql_user_master
     environment:
       - POSTGRESQL_REPLICATION_MODE=slave
       - POSTGRESQL_REPLICATION_USER=repl_last-civilization
