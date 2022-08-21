@@ -58,7 +58,11 @@ services:
       - KK_TO_RMQ_PASSWORD=last-civilization
       - KK_TO_RMQ_VHOST=/
     volumes:
+      - ./realm-export.json:/data/import/realm-export.json
+      - ./login.css:/opt/jboss/keycloak/themes/keycloak/login/resources/css/login.css
       - ./keycloak-to-rabbit-3.0.jar:/opt/jboss/keycloak/standalone/deployments/keycloak-to-rabbit-3.0.jar
+    command:
+      - "-Dkeycloak.import=/data/import/realm-export.json"
   last-civilization_rabbitmq:
     image: rabbitmq:3-management-alpine
     ports:
