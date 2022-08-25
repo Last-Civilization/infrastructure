@@ -16,7 +16,7 @@ services:
       - VAULT_ADDR=http://last-civilization_vault:8200
       - VAULT_TOKEN=last-civilization
     volumes:
-      - ./vault_init.sh:/vault_init.sh
+      - ./vault/vault_init.sh:/vault_init.sh
     depends_on:
       - "last-civilization_vault"
     command: /bin/sh -c "chmod a+x ./vault_init.sh && ./vault_init.sh"
@@ -58,9 +58,9 @@ services:
       - KK_TO_RMQ_PASSWORD=last-civilization
       - KK_TO_RMQ_VHOST=/
     volumes:
-      - ./realm-export.json:/data/import/realm-export.json
-      - ./login.css:/opt/jboss/keycloak/themes/keycloak/login/resources/css/login.css
-      - ./keycloak-to-rabbit-3.0.jar:/opt/jboss/keycloak/standalone/deployments/keycloak-to-rabbit-3.0.jar
+      - ./keycloak/realm-export.json:/data/import/realm-export.json
+      - ./keycloak/login:/opt/jboss/keycloak/themes/base/login
+      - ./keycloak/keycloak-to-rabbit-3.0.jar:/opt/jboss/keycloak/standalone/deployments/keycloak-to-rabbit-3.0.jar
     command:
       - "-Dkeycloak.import=/data/import/realm-export.json"
   last-civilization_rabbitmq:
