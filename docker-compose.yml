@@ -59,7 +59,7 @@ services:
       - KK_TO_RMQ_VHOST=/
     volumes:
       - ./keycloak/realm-export.json:/data/import/realm-export.json
-      - ./keycloak/login:/opt/jboss/keycloak/themes/base/login
+      - ./keycloak/login:/opt/jboss/keycloak/themes/custom/login
       - ./keycloak/keycloak-to-rabbit-3.0.jar:/opt/jboss/keycloak/standalone/deployments/keycloak-to-rabbit-3.0.jar
     command:
       - "-Dkeycloak.import=/data/import/realm-export.json"
