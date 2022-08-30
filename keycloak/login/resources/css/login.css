@@ -1,7 +1,12 @@
 /* BODY */
 
 body{
-    background-color: #72767b;
+    background-color: black;
+    background-image: url("../img/body.png");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    color: red;
 }
 
 /* LOGO */
@@ -18,7 +23,7 @@ body{
 
 #kc-form-login{
     padding: 20px;
-    background-image: url("../img/login_form.png");
+    background-image: url("../img/form.png");
     background-repeat: no-repeat;
     background-size: 600px 400px;
     width:  560px;
@@ -31,4 +36,19 @@ body{
 #kc-form-login input{
     display: block;
     margin: auto;
+}
+
+#kc-form-login label{
+    margin-bottom: 10px;
+    margin-top: 10px;
+    display: block;
+}
+
+#kc-login{
+    border: none;
+    background-image: url("../img/login_button.png");
+    width: 200px;
+    height: 100px;
+    background-size: 100% 100%;
+    background-color: black;
 }
