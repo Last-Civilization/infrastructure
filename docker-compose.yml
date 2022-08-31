@@ -68,6 +68,10 @@ services:
     ports:
       - "5672:5672"
       - "15672:15672"
+    volumes:
+      - ./rabbitmq/definitions.json:/etc/rabbitmq/definitions.json
+      - ./rabbitmq/rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf
     environment:
       - RABBITMQ_DEFAULT_USER=last-civilization
       - RABBITMQ_DEFAULT_PASS=last-civilization
+      - RABBITMQ_CONFIG_FILES=/etc/rabbitmq/rabbitmq.conf
