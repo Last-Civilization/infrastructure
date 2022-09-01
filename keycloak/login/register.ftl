@@ -5,12 +5,9 @@
     <#elseif section = "form">
         <form id="kc-register-form" class="${properties.kcFormClass!}" action="${url.registrationAction}" method="post">
             <div class="${properties.kcFormGroupClass!}">
-                <div class="${properties.kcLabelWrapperClass!}">
-                    <label for="firstName" class="${properties.kcLabelClass!}">${msg("firstName")}</label>
-                </div>
                 <div class="${properties.kcInputWrapperClass!}">
-                    <input type="text" id="firstName" class="${properties.kcInputClass!}" name="firstName"
-                           value="${(register.formData.firstName!'')}"
+                    <input type="hidden" id="firstName" class="${properties.kcInputClass!}" name="firstName"
+                           value="none"
                            aria-invalid="<#if messagesPerField.existsError('firstName')>true</#if>"
                     />
 
@@ -23,12 +20,9 @@
             </div>
 
             <div class="${properties.kcFormGroupClass!}">
-                <div class="${properties.kcLabelWrapperClass!}">
-                    <label for="lastName" class="${properties.kcLabelClass!}">${msg("lastName")}</label>
-                </div>
                 <div class="${properties.kcInputWrapperClass!}">
-                    <input type="text" id="lastName" class="${properties.kcInputClass!}" name="lastName"
-                           value="${(register.formData.lastName!'')}"
+                    <input type="hidden" id="lastName" class="${properties.kcInputClass!}" name="lastName"
+                           value="none"
                            aria-invalid="<#if messagesPerField.existsError('lastName')>true</#if>"
                     />
 
