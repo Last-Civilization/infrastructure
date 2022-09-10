@@ -2,6 +2,9 @@ version: '3.3'
 
 services:
   last-civilization_vault:
+    networks:
+      vpcbr:
+        ipv4_address: 10.5.0.2
     image: vault:1.11.2
     ports:
       - "8200:8200"
@@ -11,6 +14,9 @@ services:
       - IPC_LOCK
     command: vault server -dev -dev-root-token-id last-civilization
   last-civilization_vault_setup:
+    networks:
+      vpcbr:
+        ipv4_address: 10.5.0.3
     image: vault:1.11.2
     environment:
       - VAULT_ADDR=http://last-civilization_vault:8200
@@ -21,6 +27,9 @@ services:
       - "last-civilization_vault"
     command: /bin/sh -c "chmod a+x ./vault_init.sh && ./vault_init.sh"
   last-civilization_postgresql_user_master:
+    networks:
+      vpcbr:
+        ipv4_address: 10.5.0.4
     image: docker.io/bitnami/postgresql:14
     ports:
       - '5432:5432'
@@ -32,6 +41,9 @@ services:
       - POSTGRESQL_PASSWORD=last-civilization
       - POSTGRESQL_DATABASE=last-civilization_user_db
   last-civilization_postgresql_user_slave:
+    networks:
+      vpcbr:
+        ipv4_address: 10.5.0.5
     image: docker.io/bitnami/postgresql:14
     ports:
       - '5433:5432'
@@ -47,6 +59,11 @@ services:
       - POSTGRESQL_MASTER_PORT_NUMBER=5432
   last-civilization_keycloak:
     image: quay.io/keycloak/keycloak:16.0.0
+    extra_hosts:
+      - "host.docker.internal:172.17.0.1"
+    networks:
+      vpcbr:
+        ipv4_address: 10.5.0.6
     ports:
       - "8080:8080"
     environment:
@@ -64,6 +81,9 @@ services:
     command:
       - "-Dkeycloak.import=/data/import/realm-export.json"
   last-civilization_rabbitmq:
+    networks:
+      vpcbr:
+        ipv4_address: 10.5.0.7
     image: rabbitmq:3-management-alpine
     ports:
       - "5672:5672"
@@ -75,3 +95,9 @@ services:
       - RABBITMQ_DEFAULT_USER=last-civilization
       - RABBITMQ_DEFAULT_PASS=last-civilization
       - RABBITMQ_CONFIG_FILES=/etc/rabbitmq/rabbitmq.conf
+networks:
+  vpcbr:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 10.5.0.0/16
