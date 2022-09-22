@@ -126,6 +126,37 @@ services:
       - POSTGRESQL_USERNAME=last-civilization
       - POSTGRESQL_PASSWORD=last-civilization
       - POSTGRESQL_MASTER_PORT_NUMBER=5432
+  last-civilization_postgresql_stats_master:
+    networks:
+      vpcbr:
+        ipv4_address: 10.5.0.10
+    image: docker.io/bitnami/postgresql:14
+    ports:
+      - '5436:5432'
+    environment:
+      - POSTGRESQL_REPLICATION_MODE=master
+      - POSTGRESQL_REPLICATION_USER=repl_last-civilization
+      - POSTGRESQL_REPLICATION_PASSWORD=repl_last-civilization
+      - POSTGRESQL_USERNAME=last-civilization
+      - POSTGRESQL_PASSWORD=last-civilization
+      - POSTGRESQL_DATABASE=last-civilization_stats_db
+  last-civilization_postgresql_stats_slave:
+    networks:
+      vpcbr:
+        ipv4_address: 10.5.0.11
+    image: docker.io/bitnami/postgresql:14
+    ports:
+      - '5437:5432'
+    depends_on:
+      - last-civilization_postgresql_stats_master
+    environment:
+      - POSTGRESQL_REPLICATION_MODE=slave
+      - POSTGRESQL_REPLICATION_USER=repl_last-civilization
+      - POSTGRESQL_REPLICATION_PASSWORD=repl_last-civilization
+      - POSTGRESQL_MASTER_HOST=last-civilization_postgresql_stats_master
+      - POSTGRESQL_USERNAME=last-civilization
+      - POSTGRESQL_PASSWORD=last-civilization
+      - POSTGRESQL_MASTER_PORT_NUMBER=5432
 networks:
   vpcbr:
     driver: bridge
