@@ -9,3 +9,5 @@ vault write secret/payment-read-service spring.datasource.url=jdbc:postgresql://
 vault write secret/payment-write-service spring.datasource.url=jdbc:postgresql://localhost:5434/last-civilization_payment_db \ spring.datasource.username=last-civilization \ spring.datasource.password=last-civilization
 vault write secret/stats-read-service spring.datasource.url=jdbc:postgresql://localhost:5437/last-civilization_stats_db \ spring.datasource.username=last-civilization \ spring.datasource.password=last-civilization
 vault write secret/stats-write-service spring.datasource.url=jdbc:postgresql://localhost:5436/last-civilization_stats_db \ spring.datasource.username=last-civilization \ spring.datasource.password=last-civilization
+vault write secret/items-read-service spring.datasource.url=jdbc:postgresql://localhost:5439/last-civilization_items_db \ spring.datasource.username=last-civilization \ spring.datasource.password=last-civilization
+vault write secret/items-write-service spring.datasource.url=jdbc:postgresql://localhost:5438/last-civilization_items_db \ spring.datasource.username=last-civilization \ spring.datasource.password=last-civilization
