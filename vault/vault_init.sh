@@ -11,4 +11,3 @@ vault write secret/stats-read-service spring.datasource.url=jdbc:postgresql://lo
 vault write secret/stats-write-service spring.datasource.url=jdbc:postgresql://localhost:5436/last-civilization_stats_db \ spring.datasource.username=last-civilization \ spring.datasource.password=last-civilization
 vault write secret/items-read-service spring.datasource.url=jdbc:postgresql://localhost:5439/last-civilization_items_db \ spring.datasource.username=last-civilization \ spring.datasource.password=last-civilization
 vault write secret/items-write-service spring.datasource.url=jdbc:postgresql://localhost:5438/last-civilization_items_db \ spring.datasource.username=last-civilization \ spring.datasource.password=last-civilization
-vault write secret/transaction-server spring.rabbitmq.host=localhost \ spring.rabbitmq.port=5672 \ spring.rabbitmq.username=last-civilization \ spring.rabbitmq.password=last-civilization
