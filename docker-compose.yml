@@ -259,6 +259,37 @@ services:
       - last-civilization_prometheus
     ports:
       - '3000:3000'
+  last-civilization_postgresql_equipment_master:
+    networks:
+      vpcbr:
+        ipv4_address: 10.5.0.20
+    image: docker.io/bitnami/postgresql:14
+    ports:
+      - '5440:5432'
+    environment:
+      - POSTGRESQL_REPLICATION_MODE=master
+      - POSTGRESQL_REPLICATION_USER=repl_last-civilization
+      - POSTGRESQL_REPLICATION_PASSWORD=repl_last-civilization
+      - POSTGRESQL_USERNAME=last-civilization
+      - POSTGRESQL_PASSWORD=last-civilization
+      - POSTGRESQL_DATABASE=last-civilization_equipment_db
+  last-civilization_postgresql_equipment_slave:
+    networks:
+      vpcbr:
+        ipv4_address: 10.5.0.21
+    image: docker.io/bitnami/postgresql:14
+    ports:
+      - '5441:5432'
+    depends_on:
+      - last-civilization_postgresql_equipment_master
+    environment:
+      - POSTGRESQL_REPLICATION_MODE=slave
+      - POSTGRESQL_REPLICATION_USER=repl_last-civilization
+      - POSTGRESQL_REPLICATION_PASSWORD=repl_last-civilization
+      - POSTGRESQL_MASTER_HOST=last-civilization_postgresql_equipment_master
+      - POSTGRESQL_USERNAME=last-civilization
+      - POSTGRESQL_PASSWORD=last-civilization
+      - POSTGRESQL_MASTER_PORT_NUMBER=5432
 networks:
   vpcbr:
     driver: bridge

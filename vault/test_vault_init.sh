@@ -11,3 +11,5 @@ vault write secret/stats-read-service spring.datasource.url=jdbc:postgresql://lo
 vault write secret/stats-write-service spring.datasource.url=jdbc:postgresql://localhost:5432/last-civilization_db \ spring.datasource.username=last-civilization \ spring.datasource.password=last-civilization
 vault write secret/items-read-service spring.datasource.url=jdbc:postgresql://localhost:5433/last-civilization_db \ spring.datasource.username=last-civilization \ spring.datasource.password=last-civilization
 vault write secret/items-write-service spring.datasource.url=jdbc:postgresql://localhost:5432/last-civilization_db \ spring.datasource.username=last-civilization \ spring.datasource.password=last-civilization
+vault write secret/equipment-read-service spring.datasource.url=jdbc:postgresql://localhost:5433/last-civilization_db \ spring.datasource.username=last-civilization \ spring.datasource.password=last-civilization
+vault write secret/equipment-write-service spring.datasource.url=jdbc:postgresql://localhost:5432/last-civilization_db \ spring.datasource.username=last-civilization \ spring.datasource.password=last-civilization \ backpack.size=20
