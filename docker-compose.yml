@@ -26,7 +26,7 @@ services:
     depends_on:
       - "last-civilization_vault"
     command: /bin/sh -c "chmod a+x ./vault_init.sh && ./vault_init.sh"
-  last-civilization_postgresql_user_master:
+  last-civilization_postgresql_master:
     networks:
       vpcbr:
         ipv4_address: 10.5.0.4
@@ -39,8 +39,8 @@ services:
       - POSTGRESQL_REPLICATION_PASSWORD=repl_last-civilization
       - POSTGRESQL_USERNAME=last-civilization
       - POSTGRESQL_PASSWORD=last-civilization
-      - POSTGRESQL_DATABASE=last-civilization_user_db
-  last-civilization_postgresql_user_slave:
+      - POSTGRESQL_DATABASE=last-civilization_db
+  last-civilization_postgresql_slave:
     networks:
       vpcbr:
         ipv4_address: 10.5.0.5
@@ -48,12 +48,12 @@ services:
     ports:
       - '5433:5432'
     depends_on:
-      - last-civilization_postgresql_user_master
+      - last-civilization_postgresql_master
     environment:
       - POSTGRESQL_REPLICATION_MODE=slave
       - POSTGRESQL_REPLICATION_USER=repl_last-civilization
       - POSTGRESQL_REPLICATION_PASSWORD=repl_last-civilization
-      - POSTGRESQL_MASTER_HOST=last-civilization_postgresql_user_master
+      - POSTGRESQL_MASTER_HOST=last-civilization_postgresql_master
       - POSTGRESQL_USERNAME=last-civilization
       - POSTGRESQL_PASSWORD=last-civilization
       - POSTGRESQL_MASTER_PORT_NUMBER=5432
@@ -95,110 +95,17 @@ services:
       - RABBITMQ_DEFAULT_USER=last-civilization
       - RABBITMQ_DEFAULT_PASS=last-civilization
       - RABBITMQ_CONFIG_FILES=/etc/rabbitmq/rabbitmq.conf
-  last-civilization_postgresql_payment_master:
-    networks:
-      vpcbr:
-        ipv4_address: 10.5.0.8
-    image: docker.io/bitnami/postgresql:14
-    ports:
-      - '5434:5432'
-    environment:
-      - POSTGRESQL_REPLICATION_MODE=master
-      - POSTGRESQL_REPLICATION_USER=repl_last-civilization
-      - POSTGRESQL_REPLICATION_PASSWORD=repl_last-civilization
-      - POSTGRESQL_USERNAME=last-civilization
-      - POSTGRESQL_PASSWORD=last-civilization
-      - POSTGRESQL_DATABASE=last-civilization_payment_db
-  last-civilization_postgresql_payment_slave:
-    networks:
-      vpcbr:
-        ipv4_address: 10.5.0.9
-    image: docker.io/bitnami/postgresql:14
-    ports:
-      - '5435:5432'
-    depends_on:
-      - last-civilization_postgresql_payment_master
-    environment:
-      - POSTGRESQL_REPLICATION_MODE=slave
-      - POSTGRESQL_REPLICATION_USER=repl_last-civilization
-      - POSTGRESQL_REPLICATION_PASSWORD=repl_last-civilization
-      - POSTGRESQL_MASTER_HOST=last-civilization_postgresql_payment_master
-      - POSTGRESQL_USERNAME=last-civilization
-      - POSTGRESQL_PASSWORD=last-civilization
-      - POSTGRESQL_MASTER_PORT_NUMBER=5432
-  last-civilization_postgresql_stats_master:
-    networks:
-      vpcbr:
-        ipv4_address: 10.5.0.10
-    image: docker.io/bitnami/postgresql:14
-    ports:
-      - '5436:5432'
-    environment:
-      - POSTGRESQL_REPLICATION_MODE=master
-      - POSTGRESQL_REPLICATION_USER=repl_last-civilization
-      - POSTGRESQL_REPLICATION_PASSWORD=repl_last-civilization
-      - POSTGRESQL_USERNAME=last-civilization
-      - POSTGRESQL_PASSWORD=last-civilization
-      - POSTGRESQL_DATABASE=last-civilization_stats_db
-  last-civilization_postgresql_stats_slave:
-    networks:
-      vpcbr:
-        ipv4_address: 10.5.0.11
-    image: docker.io/bitnami/postgresql:14
-    ports:
-      - '5437:5432'
-    depends_on:
-      - last-civilization_postgresql_stats_master
-    environment:
-      - POSTGRESQL_REPLICATION_MODE=slave
-      - POSTGRESQL_REPLICATION_USER=repl_last-civilization
-      - POSTGRESQL_REPLICATION_PASSWORD=repl_last-civilization
-      - POSTGRESQL_MASTER_HOST=last-civilization_postgresql_stats_master
-      - POSTGRESQL_USERNAME=last-civilization
-      - POSTGRESQL_PASSWORD=last-civilization
-      - POSTGRESQL_MASTER_PORT_NUMBER=5432
-  last-civilization_postgresql_items_master:
-    networks:
-      vpcbr:
-        ipv4_address: 10.5.0.12
-    image: docker.io/bitnami/postgresql:14
-    ports:
-      - '5438:5432'
-    environment:
-      - POSTGRESQL_REPLICATION_MODE=master
-      - POSTGRESQL_REPLICATION_USER=repl_last-civilization
-      - POSTGRESQL_REPLICATION_PASSWORD=repl_last-civilization
-      - POSTGRESQL_USERNAME=last-civilization
-      - POSTGRESQL_PASSWORD=last-civilization
-      - POSTGRESQL_DATABASE=last-civilization_items_db
-  last-civilization_postgresql_items_slave:
-    networks:
-      vpcbr:
-        ipv4_address: 10.5.0.13
-    image: docker.io/bitnami/postgresql:14
-    ports:
-      - '5439:5432'
-    depends_on:
-      - last-civilization_postgresql_items_master
-    environment:
-      - POSTGRESQL_REPLICATION_MODE=slave
-      - POSTGRESQL_REPLICATION_USER=repl_last-civilization
-      - POSTGRESQL_REPLICATION_PASSWORD=repl_last-civilization
-      - POSTGRESQL_MASTER_HOST=last-civilization_postgresql_items_master
-      - POSTGRESQL_USERNAME=last-civilization
-      - POSTGRESQL_PASSWORD=last-civilization
-      - POSTGRESQL_MASTER_PORT_NUMBER=5432
   last-civilization_cassandra:
     networks:
       vpcbr:
-        ipv4_address: 10.5.0.14
+        ipv4_address: 10.5.0.8
     image: cassandra:3.11
     ports:
       - "9042:9042"
   last-civilization_prometheus:
     networks:
       vpcbr:
-        ipv4_address: 10.5.0.15
+        ipv4_address: 10.5.0.9
     image: prom/prometheus:latest
     volumes:
       - ./prometheus:/etc/prometheus
@@ -209,14 +116,14 @@ services:
   last-civilization_node-exporter:
     networks:
       vpcbr:
-        ipv4_address: 10.5.0.16
+        ipv4_address: 10.5.0.10
     image: prom/node-exporter
     ports:
       - '9100:9100'
   last-civilization_cadence:
     networks:
       vpcbr:
-        ipv4_address: 10.5.0.17
+        ipv4_address: 10.5.0.11
     image: ubercadence/server:master-auto-setup
     ports:
       - "8000:8000"
@@ -241,7 +148,7 @@ services:
   last-civilization_cadence-web:
     networks:
       vpcbr:
-        ipv4_address: 10.5.0.18
+        ipv4_address: 10.5.0.12
     image: ubercadence/web:latest
     environment:
       - "CADENCE_TCHANNEL_PEERS=last-civilization_cadence:7933"
@@ -252,44 +159,13 @@ services:
   last-civilization_grafana:
     networks:
       vpcbr:
-        ipv4_address: 10.5.0.19
+        ipv4_address: 10.5.0.13
     image: grafana/grafana
     user: "1000"
     depends_on:
       - last-civilization_prometheus
     ports:
       - '3000:3000'
-  last-civilization_postgresql_equipment_master:
-    networks:
-      vpcbr:
-        ipv4_address: 10.5.0.20
-    image: docker.io/bitnami/postgresql:14
-    ports:
-      - '5440:5432'
-    environment:
-      - POSTGRESQL_REPLICATION_MODE=master
-      - POSTGRESQL_REPLICATION_USER=repl_last-civilization
-      - POSTGRESQL_REPLICATION_PASSWORD=repl_last-civilization
-      - POSTGRESQL_USERNAME=last-civilization
-      - POSTGRESQL_PASSWORD=last-civilization
-      - POSTGRESQL_DATABASE=last-civilization_equipment_db
-  last-civilization_postgresql_equipment_slave:
-    networks:
-      vpcbr:
-        ipv4_address: 10.5.0.21
-    image: docker.io/bitnami/postgresql:14
-    ports:
-      - '5441:5432'
-    depends_on:
-      - last-civilization_postgresql_equipment_master
-    environment:
-      - POSTGRESQL_REPLICATION_MODE=slave
-      - POSTGRESQL_REPLICATION_USER=repl_last-civilization
-      - POSTGRESQL_REPLICATION_PASSWORD=repl_last-civilization
-      - POSTGRESQL_MASTER_HOST=last-civilization_postgresql_equipment_master
-      - POSTGRESQL_USERNAME=last-civilization
-      - POSTGRESQL_PASSWORD=last-civilization
-      - POSTGRESQL_MASTER_PORT_NUMBER=5432
 networks:
   vpcbr:
     driver: bridge
